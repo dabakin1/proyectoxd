@@ -1,0 +1,51 @@
+name: Ejecutor Humilde Automático
+
+on:
+  workflow_dispatch:
+    inputs:
+      user_id:
+        description: '1. Pon tu ID de Usuario de Discord (OWNER_ID)'
+        required: true
+        default: ''
+      channel_id:
+        description: '2. Pon la ID del Canal de Discord (CHANNEL_ID)'
+        required: true
+        default: ''
+      mensaje_personalizado:
+        description: '3. Pon el mensaje chistosito que quieres poner'
+        required: true
+        default: 'Aquí va tu texto base con "APUESTO" xd'
+      clavesita_segura:
+        description: '4. Pon tu clavesita / Token de Discord (¡Es seguro!!!)'
+        required: true
+        default: ''
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clonar Repositorio
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js (Version 18)
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Instalar Dependencias
+      run: npm ci
+
+    - name: Iniciar Script Fantasma Automático
+      env:
+        DISCORD_TOKEN: ${{ github.event.inputs.clavesita_segura }}
+        OWNER_ID: ${{ github.event.inputs.user_id }}
+        CHANNEL_ID: ${{ github.event.inputs.channel_id }}
+        MENSAJE_USER: ${{ github.event.inputs.mensaje_personalizado }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RUN_ID_ACTUAL: ${{ github.run_id }}
+      run: node index.js
