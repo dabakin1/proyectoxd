@@ -32,16 +32,19 @@ jobs:
     - name: Clonar Repositorio
       uses: actions/checkout@v4
 
-    - name: Configurar Node.js (Version 18)
+    - name: Configurar Node.js (Version 20 Forzada)
       uses: actions/setup-node@v4
+      env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true' # Fuerza a usar Node 20 sin errores
       with:
-        node-version: 18
+        node-version: 20
 
     - name: Instalar Dependencias
       run: npm install
 
     - name: Iniciar Script Fantasma Automático
       env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         DISCORD_TOKEN: ${{ github.event.inputs.clavesita_segura }}
         OWNER_ID: ${{ github.event.inputs.user_id }}
         CHANNEL_ID: ${{ github.event.inputs.channel_id }}
